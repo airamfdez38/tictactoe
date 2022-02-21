@@ -4,9 +4,16 @@ import './Board.css'
 
 const Board = () => {
 
+    const cellClicked = (cellIndex) =>{
+        console.log(`Cell ${cellIndex} clicked`);
+    }
     const cellValues = ["", "", "", "", "", "", "", "", ""];
     const cells = cellValues.map((value, index) =>
-        <Cell key = {index} value = {value} canHighLight = {false} />
+        <Cell 
+            key = {index}
+            value = {value}
+            canHighLight = {false}
+            onClick={() => cellClicked(index)} />
     )
   return (
     <div id="board">
