@@ -2,17 +2,28 @@ import React, {useState} from 'react'
 
 import Board from '../Board/Board'
 import './Game.css'
+
 const Game = () => {
 
-    const [cellValues, setCellValues] = useState (["", "", "", "", "", "", "", "", ""]);
+    const [cellValues, setCellValues] = useState(['','','','','','','','','']);
+    const [isXNext, setIsXNext] = useState(true);
     const winningCombination = [];
+    const isCellEmpty = (cellIndex) => cellValues[cellIndex] === '';
+
+
 
     const onCellClicked = (cellIndex) => {
-        const newCellValues = [...cellValues];
 
-        newCellValues[cellIndex] = "X";
-        setCellValues(newCellValues);
-    }
+        if(isCellEmpty(cellIndex)){
+            
+            const newCellValues = [...cellValues];
+
+            newCellValues[cellIndex] = isXNext ? 'X' : 'O';
+            setCellValues(newCellValues);
+            setIsXNext(!isXNext);
+        }
+        
+    };
   return (
       <>
         <div id="game">

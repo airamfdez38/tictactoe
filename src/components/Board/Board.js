@@ -5,14 +5,17 @@ import './Board.css'
 const Board = (props) => {
 
     
-    const cellValues = ["", "", "", "", "", "", "", "", ""];
-    const cells = cellValues.map((value, index) =>
-        <Cell 
-            key = {index}
-            value = {value}
-            canHighLight = {false}
-            onClick={() => props.cellClicked(index)} />
-    )
+    const cells = props.cellValues.map((value, index) =>{
+        const canHighLight = props.winningCombination && 
+                             props.winningCombination.indexOf(index) >= 0;
+        
+        return <Cell 
+                    key = {index}
+                    value = {value}
+                    canHighLight = {canHighLight}
+                    onClick={() => props.cellClicked(index)} />
+    })
+   
   return (
     <div id="board">
         {cells}
