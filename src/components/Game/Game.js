@@ -1,26 +1,50 @@
 import React, {useState} from 'react'
 
 import Board from '../Board/Board'
+import Result from '../Result/Result';
+import {calculateWinner} from '../../utils/WinnerCalculator';
 import './Game.css'
 
 const Game = () => {
 
     const [cellValues, setCellValues] = useState(['','','','','','','','','']);
     const [isXNext, setIsXNext] = useState(true);
-    const winningCombination = [];
+    const [isGameOver, setIsGameOver] = useState(false);
+    const [numberOfTurnsLeft, setnumberOfTurnsLeft] = useState(9);
+    const [winner, setWinner] = useState()
+    const [winningCombination, setWinningCombination] = useState([]);
+
+
     const isCellEmpty = (cellIndex) => cellValues[cellIndex] === '';
 
+    const restartGame = () => {
+        setCellValues(['','','','','','','','','']);
+        setIsXNext(true);
+        setIsGameOver(false);
+        setnumberOfTurnsLeft(9);
+        setWinner(undefined);
+        setWinningCombination([]);
+    }
 
 
     const onCellClicked = (cellIndex) => {
 
         if(isCellEmpty(cellIndex)){
-            
-            const newCellValues = [...cellValues];
 
+            const newCellValues = [...cellValues];
             newCellValues[cellIndex] = isXNext ? 'X' : 'O';
+
+            const newNumberOfTurnsLeft = numberOfTurnsLeft - 1;
+
+            //Calcular el ganador
+            const calcResult = calculateWinner(newCellValues,newNumberOfTurnsLeft ,cellIndex)
             setCellValues(newCellValues);
             setIsXNext(!isXNext);
+            setIsGameOver(calcResult.hasResult);
+            setnumberOfTurnsLeft(newNumberOfTurnsLeft);
+            setWinner(calcResult.winner);
+            setWinningCombination(calcResult.winningCombination)
+
         }
         
     };
@@ -35,18 +59,10 @@ const Game = () => {
 
         </div>
 
-        <div id="modal-overlay">
-        <div id="game-result-modal">
-            <div id="result-container">
-                <div id="winner-container">
-                    <span></span>
-                </div>
-            </div>
-            <div id="new-game-container">
-                <button id="new-game-button">Start New Game</button>
-            </div>
-        </div>
-        </div>
+        <Result 
+            isGameOver={isGameOver}
+            winner={winner}
+            onNewGameClicked={restartGame} />
         </>
   )
 }
